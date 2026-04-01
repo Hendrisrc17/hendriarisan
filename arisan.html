@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ArisanKu — Arisan 7.500.000</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <div class="lock-logo">Arisan<span>Ku</span></div>
+  <div class="lock-tagline">Arisan 7.500.000 • Kelola dengan mudah & aman</div>
+  <div class="lock-icon">🏆</div>
+  <div class="lock-card">
+    <div class="lock-tabs">
+      <button class="lock-tab active" id="tabTamuBtn" onclick="switchLockTab('tamu')">👁️ Lihat Saja</button>
+      <button class="lock-tab" id="tabAdminBtn" onclick="switchLockTab('admin')">🔐 Admin</button>
+    </div>
+
+    <div id="panelTamu">
+      <div style="text-align:center;padding:4px 0 14px;">
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.7;">Akses sebagai <strong>tamu</strong> untuk melihat data arisan dan mencatat pembayaran namamu sendiri.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-lbl">Nama Kamu</label>
+        <input class="form-input" id="inputNamaTamu" placeholder="Masukkan namamu" type="text" onkeydown="if(event.key==='Enter')masukTamu()">
+      </div>
+      <button class="btn-gold" onclick="masukTamu()">Masuk sebagai Tamu →</button>
+      <div style="margin-top:14px;padding:12px 14px;background:var(--blue-light);border-radius:12px;font-size:12px;color:#1A3A5C;line-height:1.5;">
+        🔒 Tamu hanya bisa <strong>lihat</strong> data &amp; <strong>tandai bayar diri sendiri</strong>. Untuk edit data hubungi Admin.
+      </div>
+    </div>
+
+    <div id="panelAdmin" style="display:none;">
+      <div class="lock-err" id="adminErr">❌ Email atau password salah!</div>
+      <div class="form-group">
+        <label class="form-lbl">Email Admin</label>
+        <input class="form-input" id="inputEmail" placeholder="hendri78gusiin@gmail.com" type="email" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label class="form-lbl">Password</label>
+        <input class="form-input" id="inputPass" placeholder="Password rahasia" type="password" autocomplete="off" onkeydown="if(event.key==='Enter')loginAdmin()">
+      </div>
+      <button class="btn-gold" onclick="loginAdmin()">Masuk Admin 🔐</button>
+      <div class="lock-help">Lupa password? <a href="mailto:hendri78gusiin@gmail.com">Hubungi Admin</a></div>
+      <div style="margin-top:14px;padding:12px 14px;background:rgba(201,146,42,.08);border-radius:12px;font-size:12px;color:var(--text-muted);line-height:1.5;text-align:center;">
+        👑 Admin: <strong>hendri78gusiin@gmail.com</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appWrapper" style="display:none;">
+
+  <div class="admin-bar" id="adminBar" style="display:none;">
+    <div class="admin-bar-left">👑 Admin — hendri78gusiin@gmail.com</div>
+    <button class="admin-bar-right" onclick="logout()">Keluar</button>
+  </div>
+  <div class="guest-bar" id="guestBar" style="display:none;">
+    <div class="guest-bar-left">👁️ Tamu — <span id="guestBarName" style="font-weight:700;color:var(--gold-light);"></span></div>
+    <button class="guest-bar-right" onclick="logout()">Ganti Akun</button>
+  </div>
+
+  <div class="hero">
+    <div class="hero-top">
+      <div class="logo">Arisan<span>Ku</span></div>
+      <div class="hero-badges">
+        <div class="badge-live">Aktif</div>
+        <div class="badge-role" id="heroBadgeRole"></div>
+      </div>
+    </div>
+    <div class="hero-title">Arisan 7.500.000</div>
+    <div class="hero-sub">Kena setiap tanggal 05 • Mulai Mei 2026</div>
+    <div class="hero-stats">
+      <div class="stat-card"><div class="stat-val" id="statTotal">15</div><div class="stat-lbl">Anggota</div></div>
+      <div class="stat-card"><div class="stat-val" id="statDone">8</div><div class="stat-lbl">Sudah Kena</div></div>
+      <div class="stat-card"><div class="stat-val" id="statSisa">7</div><div class="stat-lbl">Belum Kena</div></div>
+    </div>
+  </div>
+
+  <div class="main-content">
+
+    <!-- BERANDA -->
+    <div class="tab-content active" id="tab-beranda">
+      <div class="section">
+        <div class="info-card">
+          <div class="info-card-top">
+            <div><div class="prize-amount" id="prizeDisplay">Rp 7.500.000</div><div class="prize-sub">Hadiah per giliran</div></div>
+            <div class="prize-icon">🏆</div>
+          </div>
+          <div class="info-grid">
+            <div class="info-item"><div class="info-item-lbl">Iuran Bulanan</div><div class="info-item-val" id="infoIuran">Rp 500.000</div></div>
+            <div class="info-item"><div class="info-item-lbl">Cicilan Mingguan</div><div class="info-item-val" id="infoCicil">Rp 125.000</div></div>
+            <div class="info-item"><div class="info-item-lbl">Tanggal Kena</div><div class="info-item-val" id="infoTgl">05 setiap bulan</div></div>
+            <div class="info-item"><div class="info-item-lbl">Upah Admin</div><div class="info-item-val" id="infoAdminFee">Rp 100.000</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="progress-section">
+          <div class="progress-title">📊 Progress Putaran</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:53%"></div></div>
+          <div class="progress-info"><span id="progressDone">8 sudah kena</span><span id="progressPct">53%</span></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><div class="section-title">🎯 Giliran Berikutnya</div></div>
+        <div id="nextUpCard"></div>
+      </div>
+      <div class="access-banner" id="accessBanner" style="display:none;">
+        <div class="access-banner-title">🔐 Butuh Akses Edit?</div>
+        <div class="access-banner-sub">Hanya Admin yang bisa mengubah data arisan. Kirim permintaan izin ke Admin sekarang.</div>
+        <button class="btn-request" onclick="kirimRequest()">📧 Minta Izin Edit ke Admin</button>
+      </div>
+      <div class="section">
+        <div class="rekap-card">
+          <div class="rekap-title">💰 Rekap Keuangan</div>
+          <div class="rekap-row"><span class="rekap-lbl">Total Terkumpul (est.)</span><span class="rekap-val" id="rekapTerkumpul">Rp 0</span></div>
+          <div class="rekap-row"><span class="rekap-lbl">Sudah Dibagikan</span><span class="rekap-val" id="rekapDibagi">Rp 0</span></div>
+          <div class="rekap-row"><span class="rekap-lbl">Saldo Kas (est.)</span><span class="rekap-val" id="rekapSaldo">Rp 0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JADWAL -->
+    <div class="tab-content" id="tab-jadwal">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">📅 Jadwal Arisan</div>
+          <button class="section-action" id="btnTambahJadwal" onclick="openAddJadwal()" style="display:none;">+ Tambah</button>
+        </div>
+        <div class="ro-hint" id="hintJadwal" style="display:none;">👁️ Mode lihat — hanya Admin yang bisa mengubah jadwal</div>
+        <div class="jadwal-list" id="jadwalList"></div>
+      </div>
+    </div>
+
+    <!-- ANGGOTA -->
+    <div class="tab-content" id="tab-anggota">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">👥 Daftar Anggota</div>
+          <button class="section-action" id="btnTambahAnggota" onclick="openAddAnggota()" style="display:none;">+ Tambah</button>
+        </div>
+        <div class="ro-hint" id="hintAnggota" style="display:none;">👁️ Mode lihat — hanya Admin yang bisa menambah anggota</div>
+        <div class="member-grid" id="memberGrid"></div>
+      </div>
+    </div>
+
+    <!-- BAYAR -->
+    <div class="tab-content" id="tab-bayar">
+      <div class="section">
+        <div class="section-header"><div class="section-title">💳 Pembayaran Bulan Ini</div></div>
+        <div class="ro-hint" id="hintBayar" style="display:none;">💡 Kamu hanya bisa tandai bayar namamu sendiri</div>
+        <div class="payment-card">
+          <div class="payment-header"><div class="payment-header-title">Status Iuran</div><div class="payment-sub" id="paymentMonth"></div></div>
+          <div class="payment-list" id="paymentList"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('beranda',this)"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span><div class="nav-dot"></div></button>
+    <button class="nav-item" onclick="switchTab('jadwal',this)"><span class="nav-icon">📅</span><span class="nav-label">Jadwal</span><div class="nav-dot"></div></button>
+    <button class="nav-item" onclick="switchTab('anggota',this)"><span class="nav-icon">👥</span><span class="nav-label">Anggota</span><div class="nav-dot"></div></button>
+    <button class="nav-item" onclick="switchTab('bayar',this)"><span class="nav-icon">💳</span><span class="nav-label">Bayar</span><div class="nav-dot"></div></button>
+  </nav>
+
+  <button class="fab" id="fabBtn" style="display:none;" onclick="openQuickAction()">+</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- MODAL: Jadwal -->
+<div class="modal-overlay" id="modalJadwal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="mJadwalTitle">Tambah Giliran</div>
+    <div class="modal-sub">Hanya Admin yang dapat mengubah data ini</div>
+    <div class="form-group"><label class="form-label-dark">Nama Penerima</label><input class="form-input" id="inputNama" placeholder="Contoh: Amanda" type="text"></div>
+    <div class="form-group"><label class="form-label-dark">Bulan & Tahun</label><input class="form-input" id="inputBulan" placeholder="Contoh: Juni 2026" type="text"></div>
+    <div class="form-group"><label class="form-label-dark">Status</label>
+      <select class="form-input" id="inputStatus">
+        <option value="waiting">⏳ Menunggu</option>
+        <option value="current">🎯 Giliran Sekarang</option>
+        <option value="done">✓ Sudah Kena</option>
+      </select>
+    </div>
+    <button class="btn-primary" onclick="saveJadwal()">Simpan ✓</button>
+    <button class="btn-secondary" onclick="closeModal('modalJadwal')">Batal</button>
+  </div>
+</div>
+
+<!-- MODAL: Anggota -->
+<div class="modal-overlay" id="modalAnggota">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Tambah Anggota</div>
+    <div class="modal-sub">Hanya Admin yang dapat menambah anggota</div>
+    <div class="form-group"><label class="form-label-dark">Nama Anggota</label><input class="form-input" id="inputAnggotaNama" placeholder="Nama lengkap" type="text"></div>
+    <div class="form-group"><label class="form-label-dark">No. HP (opsional)</label><input class="form-input" id="inputAnggotaHp" placeholder="0812-xxxx-xxxx" type="tel"></div>
+    <button class="btn-primary" onclick="saveAnggota()">Tambah ✓</button>
+    <button class="btn-secondary" onclick="closeModal('modalAnggota')">Batal</button>
+  </div>
+</div>
+
+<!-- MODAL: Bayar -->
+<div class="modal-overlay" id="modalBayar">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Tandai Pembayaran</div>
+    <div class="modal-sub" id="mBayarSub"></div>
+    <div class="form-group"><label class="form-label-dark">Jumlah Dibayar</label><input class="form-input" id="inputJumlah" placeholder="500000" type="number"></div>
+    <div class="form-group"><label class="form-label-dark">Metode Bayar</label>
+      <select class="form-input" id="inputMetode">
+        <option>Transfer Bank</option><option>Tunai</option><option>QRIS</option><option>GoPay</option><option>OVO</option><option>Dana</option>
+      </select>
+    </div>
+    <button class="btn-primary" onclick="konfirmasiBayar()">Konfirmasi Lunas ✓</button>
+    <button class="btn-secondary" onclick="closeModal('modalBayar')">Batal</button>
+  </div>
+</div>
+
+<!-- MODAL: Detail -->
+<div class="modal-overlay" id="modalDetail">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="detailNama"></div>
+    <div class="modal-sub" id="detailSub"></div>
+    <div id="detailBody"></div>
+    <button class="btn-secondary" onclick="closeModal('modalDetail')">Tutup</button>
+  </div>
+</div>
+
+<!-- MODAL: Akses Ditolak -->
+<div class="modal-overlay" id="modalDitolak">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div style="text-align:center;padding:10px 0 24px;">
+      <div style="font-size:54px;margin-bottom:14px;">🔒</div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px;">Akses Terbatas</div>
+      <div style="font-size:14px;color:var(--text-muted);line-height:1.6;margin-bottom:20px;">Fitur ini hanya untuk <strong>Admin</strong>.<br>Kirim permintaan izin ke Admin arisan.</div>
+      <button onclick="kirimRequest();closeModal('modalDitolak')" style="display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:var(--dark);color:var(--gold-light);border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">📧 Minta Izin Edit ke Admin</button>
+    </div>
+    <button class="btn-secondary" onclick="closeModal('modalDitolak')">Tutup</button>
+  </div>
+</div>
+<script src="js\scripts.js"></script>
+</body>
+</html>
